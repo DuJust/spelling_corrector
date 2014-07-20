@@ -4,9 +4,9 @@ require 'spelling_corrector/application'
 describe SpellingCorrector::Application do
 
   describe '#run' do
-    let(:training_set_path) { '../features/training_set.txt' }
+    let(:training_set_path) { File.absolute_path('spec/lib/features/training_set.txt') }
 
-    subject { SpellingCorrector::Application.new(training_set_path).run(wrong_spelling) }
+    subject { SpellingCorrector::Application.new(training_set_path: training_set_path).run(wrong_spelling) }
 
     context 'deletion' do
       let(:wrong_spelling) { 'acess' }

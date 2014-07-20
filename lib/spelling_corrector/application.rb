@@ -4,8 +4,8 @@ require 'spelling_corrector/trainer'
 module SpellingCorrector
   class Application
 
-    def initialize(training_set_path)
-      @trainer = Trainer.new(TrainingSet.new(training_set_path))
+    def initialize(options ={})
+      @trainer = Trainer.new(TrainingSet.new(options[:training_set_path]))
     end
 
     def run(data)
