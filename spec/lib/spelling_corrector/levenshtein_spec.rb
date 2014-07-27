@@ -7,6 +7,10 @@ module SpellingCorrector
     describe '#levenshtein' do
       subject { Levenshtein.levenshtein('access') }
 
+      context 'origin feature' do
+        it { should include('access') }
+      end
+
       context 'insertion' do
         it { should include('acceess') }
       end

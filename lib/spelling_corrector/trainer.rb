@@ -6,19 +6,21 @@ module SpellingCorrector
 
     def initialize(training_set)
       @training_set = training_set
+      @features = create_features
     end
 
     def correct(data)
-      @training_set.set.max_by { |origin| conditional_probability(data, origin) * probability(origin) }
+      correct = @training_set.set.max_by { |feature| conditional_probability(data, feature) * probability(feature) }
+      return data if conditional_probability(data, correct) == Levenshtein::NOT_EXIST
+      correct
     end
 
     def probability(feature)
-      @features ||= create_features
       @features[feature]
     end
 
-    def conditional_probability(data, origin)
-      Levenshtein.levenshtein(origin).include?(data) ? 1 : 0
+    def conditional_probability(data, feature)
+      Levenshtein.levenshtein(feature).include?(data) ? Levenshtein::EXIST : Levenshtein::NOT_EXIST
     end
 
     private

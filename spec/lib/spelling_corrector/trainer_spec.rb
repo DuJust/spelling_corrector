@@ -43,8 +43,17 @@ module SpellingCorrector
     end
 
     describe '#correct' do
-      subject { trainer.correct('acces') }
-      it { should eq('access') }
+      subject { trainer.correct(wrong_spelling) }
+
+      context 'training set include' do
+        let(:wrong_spelling) { 'acces' }
+        it { should eq('access') }
+      end
+
+      context 'training set does not include' do
+        let(:wrong_spelling) { 'NotInclude' }
+        it { should eq('NotInclude') }
+      end
     end
 
   end

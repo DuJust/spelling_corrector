@@ -2,18 +2,20 @@ module SpellingCorrector
   class Levenshtein
 
     ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
+    EXIST = 1
+    NOT_EXIST = 0
 
     class << self
 
       def levenshtein(feature)
-        levenshtein = []
+        levenshtein = [feature]
         feature.size.times do |index|
           levenshtein += insertion(feature, index)
           levenshtein += deletion(feature, index)
           levenshtein += alteration(feature, index)
         end
         levenshtein += transposition(feature)
-        levenshtein
+        levenshtein.uniq
       end
 
       def insertion(feature, index)
