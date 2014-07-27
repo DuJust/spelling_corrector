@@ -7,6 +7,7 @@ module SpellingCorrector
     def initialize(training_set)
       @training_set = training_set
       @features = create_features
+      @levenshtein_set = create_levenshtein_set
     end
 
     def correct(data)
@@ -20,7 +21,7 @@ module SpellingCorrector
     end
 
     def conditional_probability(data, feature)
-      Levenshtein.levenshtein(feature).include?(data) ? Levenshtein::EXIST : Levenshtein::NOT_EXIST
+      @levenshtein_set[feature].include?(data) ? Levenshtein::EXIST : Levenshtein::NOT_EXIST
     end
 
     private
@@ -29,6 +30,13 @@ module SpellingCorrector
       @training_set.set.reduce({}) do |meta, feature|
         meta[feature] ||= 0
         meta[feature] += 1
+        meta
+      end
+    end
+
+    def create_levenshtein_set
+      @training_set.set.reduce({}) do |meta, feature|
+        meta[feature] ||= Levenshtein.levenshtein(feature)
         meta
       end
     end
