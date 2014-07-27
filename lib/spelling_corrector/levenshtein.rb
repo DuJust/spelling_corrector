@@ -9,37 +9,35 @@ module SpellingCorrector
 
       def levenshtein(feature)
         levenshtein = [feature]
-        feature.size.times do |index|
-          levenshtein += insertion(feature, index)
-          levenshtein += deletion(feature, index)
-          levenshtein += alteration(feature, index)
-        end
+        levenshtein += alteration(feature)
+        levenshtein += insertion(feature)
+        levenshtein += deletion(feature)
         levenshtein += transposition(feature)
         levenshtein.uniq
       end
 
-      def insertion(feature, index)
+      def insertion(feature)
         levenshtein = []
-        ALPHABET.each_char { |char| levenshtein << feature[0...index] + char + feature[index..feature.size] }
+        (feature.size+1).times do |index|
+          ALPHABET.each_char { |char| levenshtein << feature[0...index] + char + feature[index..feature.size] }
+        end
         levenshtein
       end
 
-      def deletion(feature, index)
-        levenshtein = []
-        levenshtein << feature[0...index] + feature[(index+1)..feature.size]
-        levenshtein
+      def deletion(feature)
+        (0...feature.size).collect { |index| feature[0...index] + feature[(index+1)..feature.size] }
       end
 
-      def alteration(feature, index)
+      def alteration(feature)
         levenshtein = []
-        ALPHABET.each_char { |char| levenshtein << feature[0...index] + char + feature[(index+1)..feature.size] }
+        feature.size.times do |index|
+          ALPHABET.each_char { |char| levenshtein << feature[0...index] + char + feature[(index+1)..feature.size] }
+        end
         levenshtein
       end
 
       def transposition(feature)
-        levenshtein = []
-        (feature.size-1).times { |index| levenshtein << feature[0...index] + feature[index+1] + feature[index] + feature[(index+2)..feature.size] }
-        levenshtein
+        (0...feature.size-1).collect { |index| feature[0...index] + feature[index+1] + feature[index] + feature[(index+2)..feature.size] }
       end
 
     end

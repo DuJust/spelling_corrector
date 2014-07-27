@@ -12,7 +12,17 @@ module SpellingCorrector
       end
 
       context 'insertion' do
-        it { should include('acceess') }
+        context 'header' do
+          it { should include('aaccess') }
+        end
+
+        context 'body' do
+          it { should include('acceess') }
+        end
+
+        context 'tail' do
+          it { should include('accessa') }
+        end
       end
 
       context 'deletion' do
